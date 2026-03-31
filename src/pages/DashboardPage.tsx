@@ -96,7 +96,7 @@ const DashboardPage = () => {
                       contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: 8, color: 'hsl(var(--foreground))' }}
                     />
                     <Line type="monotone" dataKey="users" stroke="hsl(249,67%,64%)" strokeWidth={2.5} dot={{ r: 4 }} activeDot={{ r: 6 }}
-                      onClick={(_, i) => setSelectedChart(`DAU: ${dau[i]?.month} - ${dau[i]?.users} users`)}
+                      activeDot={{ onClick: (_: any, payload: any) => setSelectedChart(`DAU: ${payload?.payload?.month} - ${payload?.payload?.users} users`) }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
