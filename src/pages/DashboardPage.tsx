@@ -2,7 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import SparklineChart from '@/components/charts/SparklineChart';
 import { CardSkeleton, ChartSkeleton } from '@/components/ui/skeletons';
-import { kpiData, dauOverTime, featureUsage, userDistribution, engagementTrends } from '@/services/mockData';
+import { kpiData, dauOverTime, featureUsage, engagementTrends, generateSparkline } from '@/services/mockData';
+import { getUserStats } from '@/services/userService';
+import { getProjects } from '@/services/projectService';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -10,31 +12,58 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
 
-const COLORS = ['hsl(249,67%,64%)', 'hsl(160,82%,50%)', 'hsl(244,97%,80%)'];
+const COLORS = ['hsl(249,67%,64%)', 'hsl(160,82%,50%)', 'hsl(244,97%,80%)', 'hsl(38,92%,50%)', 'hsl(0,84%,60%)'];
 
 const DashboardPage = () => {
   const [loading, setLoading] = useState(true);
   const [kpis, setKpis] = useState(kpiData());
   const [dau, setDau] = useState(dauOverTime());
   const [features, setFeatures] = useState(featureUsage());
-  const [dist, setDist] = useState(userDistribution());
   const [engagement, setEngagement] = useState(engagementTrends());
   const [selectedChart, setSelectedChart] = useState<string | null>(null);
 
+  // Dynamic user-aware data
+  const buildUserDistribution = useCallback(() => {
+    const stats = getUserStats();
+    return Object.entries(stats.roleDistribution).map(([name, value], i) => ({
+      name,
+      value,
+      fill: COLORS[i % COLORS.length],
+    }));
+  }, []);
+
+  const buildDynamicKpis = useCallback(() => {
+    const stats = getUserStats();
+    const base = kpiData();
+    // Adjust DAU/MAU based on active user count
+    const activeRatio = stats.active / Math.max(stats.total, 1);
+    const dauBase = 2000 + stats.active * 50;
+    const mauBase = 15000 + stats.total * 200;
+    const churnRate = stats.total > 0 ? ((stats.inactive / stats.total) * 5 + 1).toFixed(1) : '2.0';
+    const retentionRate = (100 - parseFloat(churnRate) * 3).toFixed(1);
+
+    base[0] = { ...base[0], value: dauBase.toLocaleString(), change: +(activeRatio * 8).toFixed(1), spark: generateSparkline(12, dauBase, dauBase * 0.1) };
+    base[1] = { ...base[1], value: mauBase.toLocaleString(), change: +(3.1 + stats.total * 0.1).toFixed(1), spark: generateSparkline(12, mauBase, mauBase * 0.05) };
+    base[2] = { ...base[2], value: churnRate + '%', change: -(0.3 + Math.random() * 0.2).toFixed(1) as unknown as number, spark: generateSparkline(12, parseFloat(churnRate), 1) };
+    base[3] = { ...base[3], value: retentionRate + '%', change: +(1.2 + activeRatio).toFixed(1), spark: generateSparkline(12, parseFloat(retentionRate), 3) };
+    return base;
+  }, []);
+
+  const [dist, setDist] = useState(buildUserDistribution);
+
   const refreshData = useCallback(() => {
-    setKpis(kpiData());
+    setKpis(buildDynamicKpis());
     setDau(dauOverTime());
     setFeatures(featureUsage());
-    setDist(userDistribution());
+    setDist(buildUserDistribution());
     setEngagement(engagementTrends());
-  }, []);
+  }, [buildDynamicKpis, buildUserDistribution]);
 
   useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 1200);
+    const t = setTimeout(() => { refreshData(); setLoading(false); }, 1200);
     return () => clearTimeout(t);
-  }, []);
+  }, [refreshData]);
 
-  // Auto-refresh every 12s
   useEffect(() => {
     const interval = setInterval(refreshData, 12000);
     return () => clearInterval(interval);
@@ -84,7 +113,6 @@ const DashboardPage = () => {
             </>
           ) : (
             <>
-              {/* DAU Line Chart */}
               <div className="bg-card rounded-xl p-5 card-shadow">
                 <h3 className="text-sm font-semibold text-foreground mb-4">Daily Active Users Over Time</h3>
                 <ResponsiveContainer width="100%" height={280}>
@@ -92,9 +120,7 @@ const DashboardPage = () => {
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                     <XAxis dataKey="month" tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }} />
                     <YAxis tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }} />
-                    <Tooltip
-                      contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: 8, color: 'hsl(var(--foreground))' }}
-                    />
+                    <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: 8, color: 'hsl(var(--foreground))' }} />
                     <Line type="monotone" dataKey="users" stroke="hsl(249,67%,64%)" strokeWidth={2.5} dot={{ r: 4 }}
                       activeDot={{ r: 6, onClick: (_: any, payload: any) => setSelectedChart(`DAU: ${payload?.payload?.month} - ${payload?.payload?.users} users`) }}
                     />
@@ -102,7 +128,6 @@ const DashboardPage = () => {
                 </ResponsiveContainer>
               </div>
 
-              {/* Feature Usage Bar Chart */}
               <div className="bg-card rounded-xl p-5 card-shadow">
                 <h3 className="text-sm font-semibold text-foreground mb-4">Feature Usage</h3>
                 <ResponsiveContainer width="100%" height={280}>
@@ -116,9 +141,8 @@ const DashboardPage = () => {
                 </ResponsiveContainer>
               </div>
 
-              {/* User Distribution Pie */}
               <div className="bg-card rounded-xl p-5 card-shadow">
-                <h3 className="text-sm font-semibold text-foreground mb-4">User Distribution</h3>
+                <h3 className="text-sm font-semibold text-foreground mb-4">User Distribution by Role</h3>
                 <ResponsiveContainer width="100%" height={280}>
                   <PieChart>
                     <Pie data={dist} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={3} dataKey="value" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}>
@@ -132,7 +156,6 @@ const DashboardPage = () => {
                 </ResponsiveContainer>
               </div>
 
-              {/* Engagement Area Chart */}
               <div className="bg-card rounded-xl p-5 card-shadow">
                 <h3 className="text-sm font-semibold text-foreground mb-4">Engagement Trends</h3>
                 <ResponsiveContainer width="100%" height={280}>
@@ -161,7 +184,6 @@ const DashboardPage = () => {
           )}
         </div>
 
-        {/* Drill-down detail */}
         {selectedChart && (
           <div className="bg-card rounded-xl p-5 card-shadow animate-fade-in">
             <div className="flex items-center justify-between">

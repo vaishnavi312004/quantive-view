@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { useAuth } from '@/context/AuthContext';
 import { getProjects, addProject, updateProject, deleteProject, Project } from '@/services/projectService';
+import { getDynamicUsers } from '@/services/userService';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,7 +11,7 @@ import { Plus, Pencil, Trash2, Search, FolderKanban, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const ProjectsPage = () => {
-  const { user, getAllUsers } = useAuth();
+  const { user } = useAuth();
   const [projects, setProjects] = useState(getProjects());
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
@@ -18,7 +19,7 @@ const ProjectsPage = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({ name: '', description: '', status: 'active' as 'active' | 'inactive', assignedUsers: [] as string[] });
 
-  const allUsers = getAllUsers();
+  const allUsers = getDynamicUsers();
 
   const filtered = useMemo(() => {
     let data = projects;
@@ -72,6 +73,10 @@ const ProjectsPage = () => {
   };
 
   const getUserName = (id: string) => allUsers.find(u => u.id === id)?.name || 'Unknown';
+  const getUserAvatar = (id: string) => {
+    const u = allUsers.find(x => x.id === id);
+    return u ? u.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) : '?';
+  };
 
   return (
     <DashboardLayout>
@@ -134,14 +139,11 @@ const ProjectsPage = () => {
                   <span>{project.assignedUsers.length} member{project.assignedUsers.length !== 1 ? 's' : ''}</span>
                 </div>
                 <div className="flex -space-x-2 mt-2">
-                  {project.assignedUsers.slice(0, 4).map(uid => {
-                    const u = allUsers.find(x => x.id === uid);
-                    return (
-                      <div key={uid} className="w-7 h-7 rounded-full bg-secondary text-secondary-foreground text-[10px] font-bold flex items-center justify-center border-2 border-card" title={u?.name}>
-                        {u?.avatar || '?'}
+                  {project.assignedUsers.slice(0, 4).map(uid => (
+                      <div key={uid} className="w-7 h-7 rounded-full bg-secondary text-secondary-foreground text-[10px] font-bold flex items-center justify-center border-2 border-card" title={getUserName(uid)}>
+                        {getUserAvatar(uid)}
                       </div>
-                    );
-                  })}
+                    ))}
                   {project.assignedUsers.length > 4 && (
                     <div className="w-7 h-7 rounded-full bg-muted text-muted-foreground text-[10px] font-bold flex items-center justify-center border-2 border-card">
                       +{project.assignedUsers.length - 4}
