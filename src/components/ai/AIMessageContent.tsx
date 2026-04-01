@@ -28,18 +28,27 @@ const typeIconColors: Record<string, string> = {
   info: 'text-primary',
 };
 
+const SafeIcon = ({ icon, className }: { icon: React.ElementType; className?: string }) => {
+  if (!icon) return null;
+  if (typeof icon === 'function' || (typeof icon === 'object' && '$$typeof' in (icon as any))) {
+    const Icon = icon;
+    return <Icon className={className} />;
+  }
+  return null;
+};
+
 const AIMessageContent = ({ sections }: { sections: AISectionBlock[] }) => (
   <div className="space-y-4">
     {sections.map((section, si) => (
       <div key={si}>
         <div className="flex items-center gap-2 mb-2">
-          <section.icon className="w-4 h-4 text-primary" />
+          <SafeIcon icon={section.icon} className="w-4 h-4 text-primary" />
           <h4 className="text-sm font-semibold text-foreground">{section.heading}</h4>
         </div>
         <div className="space-y-2">
           {section.items.map((item, ii) => (
             <div key={ii} className={cn('flex items-start gap-3 p-3 rounded-lg border', typeColors[item.type])}>
-              <item.icon className={cn('w-4 h-4 mt-0.5 flex-shrink-0', typeIconColors[item.type])} />
+              <SafeIcon icon={item.icon} className={cn('w-4 h-4 mt-0.5 flex-shrink-0', typeIconColors[item.type])} />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium text-foreground">{item.title}</span>
