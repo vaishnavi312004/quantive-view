@@ -19,7 +19,7 @@ const ProjectsPage = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({ name: '', description: '', status: 'active' as 'active' | 'inactive', assignedUsers: [] as string[] });
 
-  const allUsers = getAllUsers();
+  const allUsers = getDynamicUsers();
 
   const filtered = useMemo(() => {
     let data = projects;
