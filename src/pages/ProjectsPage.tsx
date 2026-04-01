@@ -142,8 +142,8 @@ const ProjectsPage = () => {
                   {project.assignedUsers.slice(0, 4).map(uid => {
                     const u = allUsers.find(x => x.id === uid);
                     return (
-                      <div key={uid} className="w-7 h-7 rounded-full bg-secondary text-secondary-foreground text-[10px] font-bold flex items-center justify-center border-2 border-card" title={u?.name}>
-                        {u?.avatar || '?'}
+                      <div key={uid} className="w-7 h-7 rounded-full bg-secondary text-secondary-foreground text-[10px] font-bold flex items-center justify-center border-2 border-card" title={getUserName(uid)}>
+                        {getUserAvatar(uid)}
                       </div>
                     );
                   })}
