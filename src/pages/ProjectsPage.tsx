@@ -143,8 +143,7 @@ const ProjectsPage = () => {
                       <div key={uid} className="w-7 h-7 rounded-full bg-secondary text-secondary-foreground text-[10px] font-bold flex items-center justify-center border-2 border-card" title={getUserName(uid)}>
                         {getUserAvatar(uid)}
                       </div>
-                    );
-                  })}
+                    ))}
                   {project.assignedUsers.length > 4 && (
                     <div className="w-7 h-7 rounded-full bg-muted text-muted-foreground text-[10px] font-bold flex items-center justify-center border-2 border-card">
                       +{project.assignedUsers.length - 4}
