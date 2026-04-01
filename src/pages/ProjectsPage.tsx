@@ -11,7 +11,7 @@ import { Plus, Pencil, Trash2, Search, FolderKanban, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const ProjectsPage = () => {
-  const { user, getAllUsers } = useAuth();
+  const { user } = useAuth();
   const [projects, setProjects] = useState(getProjects());
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
