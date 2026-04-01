@@ -73,6 +73,10 @@ const ProjectsPage = () => {
   };
 
   const getUserName = (id: string) => allUsers.find(u => u.id === id)?.name || 'Unknown';
+  const getUserAvatar = (id: string) => {
+    const u = allUsers.find(x => x.id === id);
+    return u ? u.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) : '?';
+  };
 
   return (
     <DashboardLayout>
