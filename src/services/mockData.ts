@@ -91,9 +91,12 @@ export const searchableItems = [
   { type: 'feature' as const, label: 'Report Generator', sublabel: '78% usage' },
   { type: 'feature' as const, label: 'User Management', sublabel: '65% usage' },
   { type: 'page' as const, label: 'Dashboard', sublabel: '/dashboard' },
+  { type: 'page' as const, label: 'Projects', sublabel: '/projects' },
   { type: 'page' as const, label: 'Users', sublabel: '/users' },
   { type: 'page' as const, label: 'Features', sublabel: '/features' },
   { type: 'page' as const, label: 'Retention', sublabel: '/retention' },
   { type: 'page' as const, label: 'Reports', sublabel: '/reports' },
+  { type: 'page' as const, label: 'AI Assistant', sublabel: '/ai-assistant' },
+  { type: 'page' as const, label: 'Profile', sublabel: '/profile' },
   { type: 'page' as const, label: 'Settings', sublabel: '/settings' },
 ];
