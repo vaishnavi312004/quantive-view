@@ -1,0 +1,337 @@
+Create a full frontend web application called **“AI-Powered Product Usage Analytics Dashboard” with Authentication using React**.
+
+This application must simulate a real-world SaaS internal analytics platform used by multiple users (admins, analysts, and general users) for decision-making.
+
+The application must feel like a **production-grade, multi-user enterprise SaaS product**, not a demo UI.
+
+---
+
+## 🌐 GENERAL DESIGN & UI RULES
+
+* DO NOT use blue as primary color
+
+* Use premium modern color palette:
+  Primary: Deep purple (#6C5CE7) OR emerald green (#0F9D58)
+  Secondary: Soft lavender (#A29BFE) OR mint (#55EFC4)
+  Background: #F7F9FB
+  Cards: white with soft shadow and rounded corners
+
+* Typography:
+  Use Inter or Poppins
+  Maintain spacing and hierarchy
+
+* UI Style:
+  Clean, minimal (Stripe / Notion style)
+  Smooth transitions and hover effects
+
+* Fully responsive
+
+---
+
+## 🔐 AUTHENTICATION SYSTEM (DYNAMIC)
+
+Create a real signup + login system (frontend simulated backend).
+
+Signup Page:
+
+* Name
+* Email
+* Password
+* Confirm Password
+* Role selection (Admin / Analyst / User)
+
+Rules:
+
+* Store user in localStorage (simulate database)
+* Prevent duplicate email signup
+* Password must match confirm password
+
+Login Page:
+
+* Email + Password
+
+Behavior:
+
+* Login must validate against stored users
+* Users must login ONLY with their own credentials
+* No shared passwords allowed
+* Show error if invalid credentials
+
+Session Handling:
+
+* Store logged-in user in localStorage
+* Persist session on refresh
+* Logout clears session
+
+---
+
+## 👤 USER PROFILE SYSTEM (IMPORTANT)
+
+* Each user has a profile:
+
+  * Name
+  * Email
+  * Role
+  * Profile image (optional)
+  * Preferences
+
+* Profile page:
+
+  * Editable form
+  * Save updates
+
+Behavior:
+
+* Changes must reflect instantly across app:
+
+  * Navbar profile
+  * User table
+  * Audit logs
+
+---
+
+## 👥 MULTI-USER SYSTEM
+
+* Support multiple users
+
+* Each user has:
+
+  * Own session
+  * Own activity logs
+  * Own preferences
+
+* Admin can view all users
+
+* Other roles see limited data
+
+---
+
+## 📁 PROJECT MANAGEMENT SYSTEM (NEW)
+
+Add full **Projects Module**:
+
+Each project includes:
+
+* Project Name
+* Description
+* Created By
+* Assigned Users
+* Created Date
+* Status (Active / Inactive)
+
+Features:
+
+* Create Project
+* Edit Project
+* Delete Project
+* Assign users to project
+* Filter projects
+* Search projects
+
+Behavior:
+
+* Data stored in localStorage
+* Reflect across dashboard and analytics
+
+---
+
+## 🔒 ROUTE PROTECTION
+
+* Protect all routes
+* Redirect if not authenticated
+
+Routes:
+
+* /login
+* /signup
+* /dashboard
+* /users
+* /projects
+* /features
+* /retention
+* /reports
+* /settings
+* /profile
+* /ai-assistant
+
+---
+
+## 👤 ROLE-BASED ACCESS
+
+Admin:
+
+* Full access
+
+Analyst:
+
+* Cannot access Settings
+
+User:
+
+* Limited dashboard + assigned projects only
+
+---
+
+## 📊 DASHBOARD
+
+* KPI cards (DAU, MAU, churn, etc.)
+* Charts
+* Project-based filtering
+* Auto-refresh
+
+---
+
+## 🧠 AI INTEGRATION (FULL SYSTEM)
+
+Create unified AI system.
+
+---
+
+## 🧠 AI MASTER PROMPT
+
+"You are an AI Product Analytics Assistant in a SaaS platform.
+
+You analyze product data, user activity, and project performance.
+
+Tasks:
+
+* Generate insights
+* Answer queries
+* Detect anomalies
+* Predict trends
+* Recommend actions
+
+Rules:
+
+* Be data-driven
+* Be concise
+* Focus on business value
+
+Context:
+{DATA}
+User:
+{CURRENT_USER}
+Projects:
+{PROJECTS}
+Request:
+{TYPE}
+Query:
+{QUERY}
+
+Output:
+
+* Title
+* Insights
+* Actions"
+
+---
+
+## ✨ AI FEATURES
+
+* AI Insights (dashboard)
+* AI Chat (query data)
+* Anomaly Detection
+* Predictive Analytics
+* User Segmentation
+* Smart Recommendations
+* AI Search
+* Audit Log Summarizer
+
+---
+
+## 📜 AUDIT LOG SYSTEM
+
+Track:
+
+* Login / Logout
+* Profile updates
+* Project creation
+* Navigation
+
+Each user has logs
+
+---
+
+## 🔔 NOTIFICATIONS
+
+* Real-time simulated events
+* Based on user + project activity
+
+---
+
+## 🔍 GLOBAL SEARCH
+
+* Search users, projects, features
+* AI-enhanced results
+
+---
+
+## 📡 DATA HANDLING
+
+* Use localStorage as database
+* Simulate APIs using async calls
+
+---
+
+## ⚠️ STATES
+
+* Loading
+* Empty
+* Error
+
+---
+
+## ⚡ PERFORMANCE
+
+* Lazy loading
+* Optimize rendering
+
+---
+
+## 🛡️ ERROR HANDLING
+
+* Error boundaries
+
+---
+
+## ♿ ACCESSIBILITY
+
+* ARIA labels
+* Keyboard navigation
+
+---
+
+## 📁 PROJECT STRUCTURE
+
+/src
+/components
+/pages
+/context
+/hooks
+/services
+/utils
+/assets
+
+---
+
+## 🎯 FINAL EXPECTATION
+
+* Multi-user SaaS simulation
+* Dynamic data (users + projects)
+* Fully functional auth system
+* AI-powered analytics
+* Real-time UI updates after changes
+* No hardcoded users
+* Everything must be dynamic
+
+---
+
+## ⚠️ STRICT RULES
+
+* No static credentials
+* No placeholders
+* All features must work
+* Data must persist (localStorage)
+* UI must feel like real SaaS product
+* Profile updates must reflect everywhere
+* Project system must be fully functional
