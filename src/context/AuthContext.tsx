@@ -99,7 +99,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const logout = useCallback(() => {
-    if (user) addAuditLog('Logout', `${user.name} logged out`);
+    if (user) {
+      addAuditLog('Logout', `${user.name} logged out`);
+      clearUserAIChatHistory(user.id);
+    }
     setUser(null);
     localStorage.removeItem(SESSION_KEY);
     sessionStorage.removeItem(SESSION_KEY);
