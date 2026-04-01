@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { addAuditLog } from '@/services/auditService';
+import { clearUserAIChatHistory } from '@/hooks/useAIChatHistory';
 
 export type UserRole = 'admin' | 'analyst' | 'user';
 
