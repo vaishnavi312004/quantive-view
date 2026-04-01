@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { addAuditLog } from '@/services/auditService';
+import { clearUserAIChatHistory } from '@/hooks/useAIChatHistory';
 
 export type UserRole = 'admin' | 'analyst' | 'user';
 
@@ -98,7 +99,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const logout = useCallback(() => {
-    if (user) addAuditLog('Logout', `${user.name} logged out`);
+    if (user) {
+      addAuditLog('Logout', `${user.name} logged out`);
+      clearUserAIChatHistory(user.id);
+    }
     setUser(null);
     localStorage.removeItem(SESSION_KEY);
     sessionStorage.removeItem(SESSION_KEY);
