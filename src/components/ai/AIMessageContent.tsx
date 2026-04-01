@@ -28,8 +28,10 @@ const typeIconColors: Record<string, string> = {
   info: 'text-primary',
 };
 
-const SafeIcon = ({ icon: Icon, className }: { icon: React.ElementType; className?: string }) => {
-  if (Icon && (typeof Icon === 'function' || (typeof Icon === 'object' && '$$typeof' in Icon))) {
+const SafeIcon = ({ icon, className }: { icon: React.ElementType; className?: string }) => {
+  if (!icon) return null;
+  if (typeof icon === 'function' || (typeof icon === 'object' && '$$typeof' in (icon as any))) {
+    const Icon = icon;
     return <Icon className={className} />;
   }
   return null;
