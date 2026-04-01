@@ -29,7 +29,7 @@ const typeIconColors: Record<string, string> = {
 };
 
 const SafeIcon = ({ icon: Icon, className }: { icon: React.ElementType; className?: string }) => {
-  if (typeof Icon === 'function' || (typeof Icon === 'object' && Icon !== null && '$$typeof' in Icon)) {
+  if (Icon && (typeof Icon === 'function' || (typeof Icon === 'object' && '$$typeof' in Icon))) {
     return <Icon className={className} />;
   }
   return null;
