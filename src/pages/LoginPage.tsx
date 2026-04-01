@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate, Navigate, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -41,7 +41,6 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen flex bg-background">
-      {/* Left panel */}
       <div className="hidden lg:flex lg:w-1/2 bg-primary items-center justify-center relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary to-secondary opacity-90" />
         <div className="relative z-10 text-center px-12 space-y-6">
@@ -55,7 +54,6 @@ const LoginPage = () => {
         </div>
       </div>
 
-      {/* Right panel */}
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="w-full max-w-md space-y-8">
           <div className="lg:hidden flex items-center gap-3 justify-center mb-4">
@@ -79,29 +77,13 @@ const LoginPage = () => {
 
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="admin@company.com"
-                value={email}
-                onChange={e => { setEmail(e.target.value); setErrors(prev => ({ ...prev, email: undefined })); }}
-                aria-invalid={!!errors.email}
-                className={errors.email ? 'border-destructive' : ''}
-              />
+              <Input id="email" type="email" placeholder="you@company.com" value={email} onChange={e => { setEmail(e.target.value); setErrors(prev => ({ ...prev, email: undefined })); }} aria-invalid={!!errors.email} className={errors.email ? 'border-destructive' : ''} />
               {errors.email && <p className="text-xs text-destructive">{errors.email}</p>}
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={e => { setPassword(e.target.value); setErrors(prev => ({ ...prev, password: undefined })); }}
-                aria-invalid={!!errors.password}
-                className={errors.password ? 'border-destructive' : ''}
-              />
+              <Input id="password" type="password" placeholder="••••••••" value={password} onChange={e => { setPassword(e.target.value); setErrors(prev => ({ ...prev, password: undefined })); }} aria-invalid={!!errors.password} className={errors.password ? 'border-destructive' : ''} />
               {errors.password && <p className="text-xs text-destructive">{errors.password}</p>}
             </div>
 
@@ -115,6 +97,11 @@ const LoginPage = () => {
               Sign in
             </Button>
           </form>
+
+          <p className="text-center text-sm text-muted-foreground">
+            Don't have an account?{' '}
+            <Link to="/signup" className="text-primary hover:underline font-medium">Create one</Link>
+          </p>
 
           <div className="text-center">
             <p className="text-xs text-muted-foreground space-y-1">
