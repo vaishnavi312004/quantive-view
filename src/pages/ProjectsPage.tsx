@@ -139,9 +139,7 @@ const ProjectsPage = () => {
                   <span>{project.assignedUsers.length} member{project.assignedUsers.length !== 1 ? 's' : ''}</span>
                 </div>
                 <div className="flex -space-x-2 mt-2">
-                  {project.assignedUsers.slice(0, 4).map(uid => {
-                    const u = allUsers.find(x => x.id === uid);
-                    return (
+                  {project.assignedUsers.slice(0, 4).map(uid => (
                       <div key={uid} className="w-7 h-7 rounded-full bg-secondary text-secondary-foreground text-[10px] font-bold flex items-center justify-center border-2 border-card" title={getUserName(uid)}>
                         {getUserAvatar(uid)}
                       </div>
