@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { useAuth } from '@/context/AuthContext';
 import { getProjects, addProject, updateProject, deleteProject, Project } from '@/services/projectService';
+import { getDynamicUsers } from '@/services/userService';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
